@@ -12,20 +12,24 @@ import java.util.stream.Collectors;
 public class NewsConverter {
 
     public static NewsResponse.getNewsPreviewDTO toNewsPreviewDTO(News news) {
-
         List<File> fileList = news.getFileList();
 
-        File file = fileList.stream()
-                .filter(File::isRepresent)
-                .findFirst()
-                .orElse(null);
+        File file = null;
+        if (fileList != null) {
+            file = fileList.stream()
+                    .filter(File::isRepresent)
+                    .findFirst()
+                    .orElse(null);
+        }
 
         return NewsResponse.getNewsPreviewDTO.builder()
                 .id(news.getId())
-                .title(news.getTitle())
+                .createdAt(news.getCreatedAt())
                 .category(news.getCategory().toString())
+                .title(news.getTitle())
+                .content(news.getContent())
                 .author(news.getAuthor())
-                .filePath(file.getPath())
+                .filePath(file != null ? file.getPath() : null)
                 .build();
     }
 

@@ -9,10 +9,10 @@ import com.example.olebackend.domain.mapping.MemberApply;
 import com.example.olebackend.repository.LessonRepository;
 import com.example.olebackend.repository.MemberApplyRepository;
 import com.example.olebackend.repository.MemberRepository;
-import com.example.olebackend.web.dto.MemberLoginRequest;
+//import com.example.olebackend.web.dto.MemberLoginRequest;
 import com.example.olebackend.web.dto.MemberSignUpRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +26,7 @@ import static com.example.olebackend.apiPayLoad.code.status.ErrorStatus.*;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
     private final LessonRepository lessonRepository;
     private final MemberApplyRepository memberApplyRepository;
 
@@ -53,7 +53,7 @@ public class MemberService {
                 .role(Role.USER)
                 .build();
 
-        member.passwordEncode(passwordEncoder);
+//        member.passwordEncode(passwordEncoder);
         memberRepository.save(member);
     }
 

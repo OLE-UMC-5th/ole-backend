@@ -36,7 +36,7 @@ public class Lesson extends BaseEntity {
     private Type lessonType ;      // 수업 방식
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subcategory_id" )
+    @JoinColumn(name = "sub_category_id" )
     private SubCategory subCategory ;
 
     private String supplies ; // 준비물

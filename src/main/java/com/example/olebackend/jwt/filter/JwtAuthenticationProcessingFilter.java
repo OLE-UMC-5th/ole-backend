@@ -1,9 +1,9 @@
 package com.example.olebackend.jwt.filter;
 
 import com.example.olebackend.domain.Member;
-import com.example.olebackend.jwt.service.JwtService;
+//import com.example.olebackend.jwt.service.JwtService;
 import com.example.olebackend.repository.MemberRepository;
-import com.example.olebackend.oauth2.util.PasswordUtil;
+//import com.example.olebackend.oauth2.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
