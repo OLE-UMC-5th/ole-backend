@@ -22,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter{
-    private static final String NO_CHECK_URL = "/login";
+    private static final String NO_CHECK_URL = "/member/login";
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
@@ -81,7 +81,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter{
                 .authorities(myMember.getRole().name())
                 .build();
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, null, authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, null,
+                authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

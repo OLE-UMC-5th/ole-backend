@@ -4,7 +4,7 @@ spring:
       "local": "local, jwt, oauth"
     active: local
   datasource:
-    url: jdbc:mysql://localhost:3306/ole
+    url: jdbc:mysql://localhost:3306/TESTDB
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver

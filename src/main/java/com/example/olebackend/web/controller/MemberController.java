@@ -3,12 +3,15 @@ package com.example.olebackend.web.controller;
 import com.example.olebackend.apiPayLoad.ApiResponse;
 import com.example.olebackend.converter.MemberConverter;
 import com.example.olebackend.domain.mapping.MemberApply;
+import com.example.olebackend.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.example.olebackend.service.MemberService;
 import com.example.olebackend.web.dto.MemberLoginRequest;
 import com.example.olebackend.web.dto.MemberResponse;
 import com.example.olebackend.web.dto.MemberSignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,8 +21,11 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
+    private CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter;
 
-    @PostMapping("/member/signup")
+    // login은 JwtAuthenticationProcessingFilter에서 낚아채서 처리합니다.
+    // {bcrypt}$2a$10$YDbw/rMsG6YteiS4kk7HrOqsBUkYPZ9fgfvfTkT5gywKG6vxl3AXO
+    @PostMapping("/member/sign-up")
     public String signUp(@RequestBody MemberSignUpRequest memberSignUpDto) throws Exception{
         memberService.signUp(memberSignUpDto);
         return "signup success";
@@ -30,15 +36,6 @@ public class MemberController {
         return "jwtTest request success";
     }
 
-//    @PostMapping("/member/login")
-//    public String login(@RequestBody MemberLoginRequest memberLoginDto) throws Exception{
-//        memberService.login(memberLoginDto);
-//        return "login success";
-//    }
-//    @GetMapping("/member/login")
-//    String login() {
-//        return "login";
-//    }
 
     @PostMapping("/lesson/{lessonId}/member")
     @Operation(summary = "교육 신청하기(로그인) API")

@@ -6,11 +6,16 @@ import com.example.olebackend.domain.enums.Role;
 import com.example.olebackend.domain.enums.SocialType;
 import com.example.olebackend.domain.mapping.Likes;
 import com.example.olebackend.domain.mapping.MemberApply;
+import com.example.olebackend.repository.MemberRepository;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -19,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "member")
-public class Member extends BaseEntity {
+public class Member extends BaseEntity{
     @Id
     @GeneratedValue
     private Long id;
@@ -82,6 +87,11 @@ public class Member extends BaseEntity {
         this.password = passwordEncoder.encode(this.password);
     }
 
+    public void updatePassword(String updatePassword, PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(updatePassword);
+    }
+
+
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;
     }
@@ -93,4 +103,5 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Community> memberCommunityList = new ArrayList<>();
+
 }
