@@ -23,7 +23,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member extends BaseEntity {
+@Table(name = "member")
+public class Member extends BaseEntity{
     @Id
     @GeneratedValue
     private Long id;

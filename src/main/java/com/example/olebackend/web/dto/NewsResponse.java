@@ -16,13 +16,10 @@ public class NewsResponse {
     public static class getNewsPreviewDTO {
 
         Long id;
-        LocalDateTime createdAt;
-        String category;
         String title;
-        String content;
+        String category;
         String author;
         String filePath;
-
 
     }
 
