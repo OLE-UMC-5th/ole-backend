@@ -66,14 +66,14 @@ public class SecurityConfig {
                         "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
                         "/webjars/**", "/swagger-ui.html").permitAll()
                         // 교육 신청, 찜하기, 댓글 달기는 로그인한 사용자만 접근 가능
-                .antMatchers("/lesson/{lessonId}/member", "/lesson/{lessonId}/like", "/community/{communityId}/comments").permitAll()
+                .antMatchers("/lesson/{lessonId}/member", "/lesson/{lessonId}/like", "/community/{communityId}/comments").hasRole("USER")
 
                 .antMatchers(
                         // 기타 API 허용 URL
                         "/guest/**", "/community", "/community/{communityId}", "/sub_categories/{categoryId}",
                         "/lessons/survey", "/news/**", "/lesson/**",
                         "/health").permitAll()
-                 // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
+                .anyRequest().authenticated()// 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 .and()
                 //== 소셜 로그인 설정 ==//
                 .oauth2Login()
