@@ -43,7 +43,12 @@ public enum ErrorStatus implements BaseErrorCode {
     NON_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "NONMEMBER4001", "회원 정보가 존재하지 않습니다."),
 
     //회원 관련 응답
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER4001", "회원 정보가 존재하지 않습니다.");
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER4001", "회원 정보가 존재하지 않습니다."),
+
+    // 좋아요 관련 응답
+    ALREADY_IN_WISHLIST(HttpStatus.NOT_FOUND, "LIKE001", "이미 좋아요 목록에 존재합니다."),
+    ALREADY_CANCELED(HttpStatus.NOT_FOUND, "LIKE4002", "이미 취소되었습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

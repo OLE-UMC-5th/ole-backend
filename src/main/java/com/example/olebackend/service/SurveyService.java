@@ -9,6 +9,7 @@ import com.example.olebackend.repository.SubCategoryRepository;
 import com.example.olebackend.repository.SurveyRepository;
 import com.example.olebackend.web.dto.SurveyRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static com.example.olebackend.apiPayLoad.code.status.ErrorStatus.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SurveyService {
@@ -44,7 +46,17 @@ public class SurveyService {
     @Transactional
     public List<Lesson> getSurveyResults(SurveyRequest.SurveyCondition condition){
 
-        List<Lesson> lessons = surveyRepository.search(condition) ;
+        List<Lesson> lessons = surveyRepository.strictFiltering(condition) ;
+        log.info("strict Filtering");
+
+        if (lessons.isEmpty()) {
+            lessons = surveyRepository.normalFiltering(condition) ;
+            log.info("normal Filtering");
+        }
+        if (lessons.isEmpty()) {
+            lessons = surveyRepository.lenientFiltering(condition) ;
+            log.info("lenient Filtering");
+        }
         if (lessons.isEmpty()) {
             throw new GeneralException(LESSON_NOT_FOUND) ;
         }

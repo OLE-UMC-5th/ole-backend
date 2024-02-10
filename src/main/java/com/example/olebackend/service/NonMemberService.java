@@ -23,10 +23,14 @@ public class NonMemberService {
     private final LessonRepository lessonRepository;
 
     public NonMember applyLesson(NonMemberRequest.ApplyDTO request, Long lessonId) {
+        String phoneNum=request.getPhoneNum();
 
         Lesson lesson=lessonRepository.findById(lessonId)
                 .orElseThrow(() ->new GeneralException(LESSON_NOT_FOUND));
 
+        if(nonMemberRepository.existsByLessonIdAndPhoneNum(lessonId, phoneNum)){
+            throw new GeneralException(LESSONAPPLY_ALREADY_EXISTS);
+        }
 
         NonMember nonMember = NonMemberConverter.toNonMember(request,lesson);
 

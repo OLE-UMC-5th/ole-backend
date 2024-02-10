@@ -39,12 +39,27 @@ public class LessonController {
     @GetMapping("/category/{categoryId}")
     @Operation(summary = "카테고리별 교육 상세 조회 API")
     @Parameters({
+            @Parameter(name = "keyword", description = "검색할 키워드입니다."),
             @Parameter(name = "page", description = "페이지 번호이며, 1페이지부터 시작입니다."),
     })
     public ApiResponse<LessonResponse.getLessonListByCategoryAndSearchDTO> getLessonListByCategory(@PathVariable Long categoryId,
+                                                                                                   @RequestParam(required = false, value = "keyword") String keyword,
                                                                                                    @RequestParam(required = false, defaultValue = "1") Integer page) {
-        Page<Lesson> lessonList = lessonService.getLessonListByCategory(categoryId, page);
-        return ApiResponse.onSuccess(LessonConverter.toLessonListByCategoryAndSearchDTO(lessonList));
+        Specification<Lesson> spec = (root, query, criteriaBuilder) -> null;
+
+        // 키워드가 있으면 -> 카테고리별로 조회한 교육 리스트 내에서 keyword 포함한 교육 리턴
+        if (keyword != null) {
+            spec = spec.and(LessonSpecification.findByKeyword(keyword));
+            Page<Lesson> lessonList = lessonService.getLessonListBySpecification(categoryId, spec, page);
+            return ApiResponse.onSuccess(LessonConverter.toLessonListByCategoryAndSearchDTO(lessonList));
+        }
+
+        // 키워드가 없으면 -> 단순 카테고리별 교육 조회
+        else {
+            Page<Lesson> lessonList = lessonService.getLessonListByCategory(categoryId, page);
+            return ApiResponse.onSuccess(LessonConverter.toLessonListByCategoryAndSearchDTO(lessonList));
+
+        }
     }
 
     @GetMapping

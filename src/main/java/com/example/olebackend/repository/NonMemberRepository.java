@@ -13,4 +13,6 @@ public interface NonMemberRepository extends JpaRepository<NonMember, Long> {
     void removeByPhoneNumAndLessonId(String phoneNum, Long lessonId);
 
     List<NonMember> findAllByPhoneNum(String phoneNum);
+
+    Boolean existsByLessonIdAndPhoneNum(Long lessonId, String phoneNum);
 }

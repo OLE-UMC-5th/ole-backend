@@ -4,8 +4,10 @@ import com.example.olebackend.domain.mapping.Likes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface LikeRepository extends JpaRepository<Likes, Long> {
 
-    Likes findByLessonIdAndMemberId(Long lessonId, Long memberId) ;
+    Optional<Likes> findByLessonIdAndMemberId(Long lessonId, Long memberId) ;
 }

@@ -56,38 +56,4 @@ public class MemberService {
         member.passwordEncode(passwordEncoder);
         memberRepository.save(member);
     }
-
-
-
-    public MemberApply applyLesson(Long lessonId,Long memberId) {
-
-        Lesson lesson=lessonRepository.findById(lessonId)
-                .orElseThrow(() ->new GeneralException(LESSON_NOT_FOUND));
-
-        Member member=memberRepository.findById(memberId)
-                .orElseThrow(() ->new GeneralException(MEMBER_NOT_FOUND));
-
-        if(memberApplyRepository.existsByLessonIdAndMemberId(lessonId, memberId)){
-            throw new GeneralException(LESSONAPPLY_ALREADY_EXISTS);
-        }
-
-        MemberApply memberApply = MemberConverter.toMemberApply(lesson,member);
-
-        return memberApplyRepository.save(memberApply);
-    }
-
-    @Transactional
-    public void cancelLesson(Long lessonId,Long memberId) {
-
-        Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
-        if (optionalLesson.isEmpty()) {
-            throw new GeneralException(LESSON_NOT_FOUND);
-        }
-
-        if (!memberApplyRepository.existsByLessonIdAndMemberId(lessonId, memberId)) {
-            throw new GeneralException(LESSONAPPLY_NOT_FOUND);
-        }
-
-        memberApplyRepository.removeByLessonIdAndMemberId(lessonId, memberId);
-    }
 }

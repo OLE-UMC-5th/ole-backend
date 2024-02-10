@@ -3,6 +3,7 @@ package com.example.olebackend.web.controller;
 import com.example.olebackend.apiPayLoad.ApiResponse;
 import com.example.olebackend.converter.CommunityConverter;
 import com.example.olebackend.domain.Community;
+import com.example.olebackend.domain.enums.CommunityCategory;
 import com.example.olebackend.service.CommunityService;
 import com.example.olebackend.web.dto.CommunityRequest;
 import com.example.olebackend.web.dto.CommunityResponse;
@@ -25,10 +26,12 @@ public class CommunityController {
     @GetMapping
     @Operation(summary = "소통하러올래 목록 조회 API")
     @Parameters({
+            @Parameter(name = "category", description = "소통하러올래 게시글 필터링 기준입니다. (궁금해요, 같이해요)"),
             @Parameter(name = "page", description = "페이지 번호이며, 1페이지부터 시작입니다."),
     })
-    public ApiResponse<CommunityResponse.getCommunityListDTO> getCommunityList(@RequestParam(required = false, defaultValue = "1") Integer page) {
-        Page<Community> communityList = communityService.getCommunityList(page);
+    public ApiResponse<CommunityResponse.getCommunityListDTO> getCommunityList(@RequestParam(required = false) CommunityCategory category,
+                                                                               @RequestParam(required = false, defaultValue = "1") Integer page) {
+        Page<Community> communityList = communityService.getCommunityList(category, page);
         return ApiResponse.onSuccess(CommunityConverter.toCommunityListDTO(communityList));
     }
 

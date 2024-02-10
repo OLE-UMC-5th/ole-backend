@@ -10,8 +10,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.olebackend.domain.QLesson.lesson;
@@ -28,7 +30,7 @@ public class SurveyRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<Lesson> search(SurveyRequest.SurveyCondition condition){
+    public List<Lesson> strictFiltering(SurveyRequest.SurveyCondition condition){
         return queryFactory
                 .selectFrom(lesson)
                 .where(subcategoryEq(condition.getSub_categoryIds()),
@@ -38,15 +40,30 @@ public class SurveyRepository {
                         weekDayEq(condition.getChoices()),
                         classTimeEq(condition.getChoices()))
                 .fetch() ;
-    } // search
+    } // strictFiltering
+
+    public List<Lesson> normalFiltering(SurveyRequest.SurveyCondition condition){
+        return queryFactory
+                .selectFrom(lesson)
+                .where(subcategoryEq(condition.getSub_categoryIds()),
+                        lessonTypeEq(condition.getClassType()),
+                        weekDayEq(condition.getChoices()),
+                        classTimeEq(condition.getChoices()))
+                .fetch() ;
+    } // normalFiltering
+
+    public List<Lesson> lenientFiltering(SurveyRequest.SurveyCondition condition){
+        return queryFactory
+                .selectFrom(lesson)
+                .where(subcategoryEq(condition.getSub_categoryIds()),
+                        lessonTypeEq(condition.getClassType()))
+                .fetch() ;
+    } // lenientFiltering
+
 
     /*
-    필수 일치 조건들
-     */
-    // 신청가능한 수업 목록 --> 여유될 시 개발
-
-
-    // 세부 카테고리
+    세부 카테고리
+    */
     private BooleanExpression subcategoryEq(Long[] subCategoryIds) {
         if (isEmpty(subCategoryIds)) {
             return null;
@@ -55,7 +72,9 @@ public class SurveyRepository {
         }
     }
 
-    // 교육 방식
+    /*
+    교육 방식
+     */
     private BooleanExpression lessonTypeEq(Integer[] classTypes) {
         if (isEmpty(classTypes)) {
             return null;
@@ -68,10 +87,10 @@ public class SurveyRepository {
         }
     }
 
+
     /*
-    꼭 일치하지는 않아도 되는 조건들 (근사치)
+    선생님 성별
      */
-    // 선생님 성별
     private BooleanExpression teacherGenderEq(int teacher_gender) {
 
         if (teacher_gender == 1) {
@@ -86,7 +105,9 @@ public class SurveyRepository {
         }
     }
 
-    // 선생님 나잇대
+    /*
+    선생님 나잇대
+     */
     private BooleanExpression teacherAgeEq(Integer[] teacher_ages) {
 
         if (isEmpty(teacher_ages)) {
@@ -102,7 +123,9 @@ public class SurveyRepository {
                 .between(min, max) ;
     }
 
-    // 희망 수업 요일
+    /*
+    희망 수업 요일
+     */
     private BooleanExpression weekDayEq(Integer[] choices) {
         EnumSet<Week> weeks;
 
@@ -116,6 +139,9 @@ public class SurveyRepository {
         return lesson.lectureWeekDay.in(weeks.toArray(new Week[0]));
     }
 
+    /*
+    희망 수업 시간
+     */
     private BooleanExpression classTimeEq(Integer[] choices) {
         List<BooleanExpression> conditions = Arrays.stream(choices)
                 .map(choice -> {
@@ -133,6 +159,8 @@ public class SurveyRepository {
         return conditions.stream().reduce(BooleanExpression::or).orElse(null);
     }
 
-    // 주소 --> 여유될 시 개발
+    /*
+    주소
+    */
 
 }

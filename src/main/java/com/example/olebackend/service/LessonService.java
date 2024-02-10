@@ -39,7 +39,7 @@ public class LessonService {
 
     public Page<Lesson> getLessonListByCategory(Long categoryId, Integer page) {
 
-        Page<Lesson> lessonList = lessonRepository.findLessonsByCategoryId(categoryId, PageRequest.of(page - 1, 10));
+        Page<Lesson> lessonList = lessonRepository.findBySubCategoryCategoryId(categoryId, PageRequest.of(page - 1, 10));
 
         // 카테고리 자체가 없을 때
         if (!categoryRepository.existsById(categoryId)) {
@@ -57,6 +57,29 @@ public class LessonService {
         }
 
         return lessonList;
+    }
+
+
+    public Page<Lesson> getLessonListBySpecification(Long categoryId, Specification<Lesson> spec, Integer page) {
+        Page<Lesson> lessonList = lessonRepository.findBySubCategoryCategoryId(categoryId, PageRequest.of(page - 1, 10));
+
+        Page<Lesson> lessonListByKeyWord = lessonRepository.findAll(spec.and((root, query, criteriaBuilder) -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))), lessonList.getPageable());
+
+        // 카테고리 자체가 없을 때
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new GeneralException(CATEGORY_NOT_FOUND);
+        }
+
+        // 해당 카테고리에 존재하는 교육이 없을 때
+        if (lessonListByKeyWord.getTotalPages() == 0) {
+            throw new GeneralException(LESSON_NOT_FOUND);
+        }
+
+        // 전체 페이지 수 이상의 값을 입력했을 때
+        if (page > lessonList.getTotalPages()) {
+            throw new GeneralException(PAGE_NOT_FOUND);
+        }
+        return lessonListByKeyWord;
     }
 
     public List<Lesson> getLessonListByOrderCriteria(String orderCriteria) {
