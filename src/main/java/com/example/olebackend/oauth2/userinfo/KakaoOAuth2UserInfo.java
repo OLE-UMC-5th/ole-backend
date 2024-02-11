@@ -13,7 +13,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo{
     }
 
     @Override
-    public String getName(){
+    public String getNickname(){
         Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
 
         if(account == null){
@@ -24,6 +24,25 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo{
         if(profile == null){
             return null;
         }
-        return (String) profile.get("name");
+        return (String) profile.get("nickname");
     }
+//    @Override
+//    public String getEmail(){
+//        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+//
+//        if(response == null){
+//            return null;
+//        }
+//        return(String) response.get("email");
+//    }
+//    @Override
+//    public String getGender(){
+//        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+//
+//        if(response == null){
+//            return null;
+//        }
+//        return(String) response.get("gender");
+//    }
+
 }

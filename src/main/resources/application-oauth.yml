@@ -8,7 +8,7 @@ spring:
             client-secret: qlEieBPZN5
             redirect-uri: http://localhost:8080/login/oauth2/code/naver
             authorization-grant-type: authorization_code
-            scope: name, email, profile_image # 수정 필요
+            scope: name, email # 수정 필요
             client-name: Naver
 
           kakao:
@@ -17,7 +17,7 @@ spring:
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
-            scope: profile_nickname, profile_image
+            scope: profile_nickname
             client-name: Kakao
 
         provider:
