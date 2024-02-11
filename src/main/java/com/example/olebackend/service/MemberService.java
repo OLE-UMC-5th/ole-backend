@@ -30,7 +30,7 @@ public class MemberService {
     private final LessonRepository lessonRepository;
     private final MemberApplyRepository memberApplyRepository;
 
-    public void signUp(MemberSignUpRequest memberSignUpDto) throws Exception{
+    public Long signUp(MemberSignUpRequest memberSignUpDto) throws Exception{
 
         if(memberRepository.findByEmail(memberSignUpDto.getEmail()).isPresent()){
             throw new Exception("이미 가입된 이메일입니다.");
@@ -55,5 +55,6 @@ public class MemberService {
 
         member.passwordEncode(passwordEncoder);
         memberRepository.save(member);
+        return member.getId();
     }
 }
